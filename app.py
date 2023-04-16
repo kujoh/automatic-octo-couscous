@@ -29,8 +29,8 @@ def receive():
 
     # Prevent self-reply
     if data["sender_type"] != "bot":
-        if data["text"].startswith("/ping"):
-            send(data["name"] + " pinged me!")
+        if data["text"].startswith("/help"):
+            send(" Hi, " + data["name"] + " \nI am just a half cocked bot right now, but this will be updated with actual useful info.")
         if data["name"] == "Basith Penna-Hakkim" and bas_rand <= 5:
             send(
                 "oh my dear basith\nmy heart yearns for your friendship\nlet’s be friends basith")
