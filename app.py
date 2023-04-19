@@ -42,7 +42,7 @@ def receive():
             #post_img_to_groupme("./ok.jpg")
         #if "ayo" in data["text"].lower():
             #send(
-                "sup")
+                #"sup")
         if "/standings" in data["text"].lower():
             response = requests.get(standings_url)
             response.raise_for_status()
