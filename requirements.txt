@@ -3,3 +3,8 @@ gunicorn
 requests
 jinja2
 bs4
+pandas
+numpy
+time
+hashlib
+urllib
