@@ -3,6 +3,12 @@ import json
 import requests
 import random
 from flask import Flask, request
+import bs4
+import pandas as pd
+import numpy as np
+import time
+import hashlib
+from urllib.request import urlopen, Request
 
 token = os.getenv("Token")
 bot_id = os.getenv("BotID")  # os.getenv("TEST_BOT_ID")
@@ -10,7 +16,7 @@ app = Flask(__name__)
 
 url = "https://api.groupme.com/v3/bots/post"
 img_url = "https://image.groupme.com"
-
+standings_url = "https://www.oaklandyard.com/lg_standings/lg_standings.asp?LgSessCode=2732&ReturnPg=lg%5Fsoccer%5Fcoed%2Easp%232732&ShowRankings=False&HeaderTitle=&sw=1800"
 
 @app.route("/", methods=["GET"])
 def home():
@@ -19,9 +25,6 @@ def home():
 
 @app.route("/", methods=["POST"])
 def receive():
-    mat_names = ["mat", "matt", "matthew"]
-    rand_num = random.randint(-100, 100)
-    bas_rand = random.randint(0, 1000)
 
     data = request.get_json()
     print("Incoming Msg: ")
@@ -30,29 +33,50 @@ def receive():
     # Prevent self-reply
     if data["sender_type"] != "bot":
         if data["text"].startswith("/help"):
-            send(" Hi, " + data["name"] + " \nI am just a half cocked bot right now, but this will be updated with actual useful info.")
-        if data["name"] == "Basith Penna-Hakkim" and bas_rand <= 5:
-            send(
-                "oh my dear basith\nmy heart yearns for your friendship\nlet’s be friends basith")
-            post_img_to_groupme("./bas.jpg")
-        if "ok" in data["text"].lower():
-            post_img_to_groupme("./ok.jpg")
-        if "ayo" in data["text"].lower():
-            send(
+            send(" Hi, " + data["name"] + " \n\nI am just a half cocked bot right now, but this will be updated with actual useful info.")
+        #if data["name"] == "Basith Penna-Hakkim" and bas_rand <= 5:
+            #send(
+                #"oh my dear basith\nmy heart yearns for your friendship\nlet’s be friends basith")
+            #post_img_to_groupme("./bas.jpg")
+        #if "ok" in data["text"].lower():
+            #post_img_to_groupme("./ok.jpg")
+        #if "ayo" in data["text"].lower():
+            #send(
                 "sup")
+        if "/standings" in data["text"].lower():
+            response = requests.get(standings_url)
+            response.raise_for_status()
+            soup = bs4.BeautifulSoup(response.text)
+            #find everything with class dicLargeTable and assign to table
+            table = soup.find_all('div', {'class': 'divLargeTable'})[1]
+            #find everything with class divMultipleColumns and assign to rows
+            rows = table.find_all('div', {'class': 'divMultipleColumns'})
+            #assign standingsTitle1 as headers
+            headers = [title.text for title in rows[0].find_all('div', {'class': 'standingsTitle1'})]
+
+            databs = {}
+            for row in rows[1:]:
+                cols = row.find_all('div')
+                index = cols[0].text.strip()
+                databs[index] = [int(value.text) for value in cols[1:]]
+    
+            df = pd.DataFrame.from_dict(databs, orient='index', columns=headers)
+            
+            send(
+                df)
+
 
         # check if mat, matt, or matthew exists in string (case insensitive)
         # RNG send different pictures
-        if any(x in data["text"].lower() for x in mat_names):
-            if rand_num >= 50:
-                post_img_to_groupme("./mat.jpeg")
-            elif rand_num >= 0:
-                post_img_to_groupme("./bucket.jpg")
-            elif rand_num < 0:
-                post_img_to_groupme("./baby_bucket.jpg")
+        #if any(x in data["text"].lower() for x in mat_names):
+            #if rand_num >= 50:
+                #post_img_to_groupme("./mat.jpeg")
+            #elif rand_num >= 0:
+                #post_img_to_groupme("./bucket.jpg")
+            #elif rand_num < 0:
+                #post_img_to_groupme("./baby_bucket.jpg")
 
     return "ok", 200
-
 
 def send(msg):
     json = {
