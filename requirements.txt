@@ -2,3 +2,4 @@ flask
 gunicorn
 requests
 jinja2
+bs4
