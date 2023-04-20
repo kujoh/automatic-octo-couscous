@@ -43,7 +43,7 @@ def receive():
         #if "ayo" in data["text"].lower():
             #send(
                 #"sup")
-        if "/standings" in data["text"].lower():
+        if data["text"].startswith("/standings"):
             response = requests.get(standings_url)
             response.raise_for_status()
             soup = bs4.BeautifulSoup(response.text)
