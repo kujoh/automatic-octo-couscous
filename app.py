@@ -6,7 +6,7 @@ from flask import Flask, request
 import bs4
 import pandas as pd
 import numpy as np
-import time
+import dataframe_image as dfi
 import hashlib
 from urllib.request import urlopen, Request
 
@@ -61,9 +61,10 @@ def receive():
                 databs[index] = [int(value.text) for value in cols[1:]]
     
             df = pd.DataFrame.from_dict(databs, orient='index', columns=headers)
+            dfi.export(df, 'standings.png')
             
-            send(
-                "standingstest")
+            post_img_to_groupme(
+                "standings.png")
 
 
         # check if mat, matt, or matthew exists in string (case insensitive)
