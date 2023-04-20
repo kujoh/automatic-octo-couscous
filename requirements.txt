@@ -7,3 +7,4 @@ pandas
 numpy
 dataframe_image
 matplotlib
+lxml
