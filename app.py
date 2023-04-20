@@ -61,7 +61,7 @@ def receive():
                 databs[index] = [int(value.text) for value in cols[1:]]
     
             df = pd.DataFrame.from_dict(databs, orient='index', columns=headers)
-            dfi.export(df, 'standings.png')
+            dfi.export(df, 'standings.png', table_conversion = 'matplotlib')
             
             post_img_to_groupme(
                 "standings.png")
