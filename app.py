@@ -63,7 +63,7 @@ def receive():
             df = pd.DataFrame.from_dict(databs, orient='index', columns=headers)
             
             send(
-                df)
+                "standingstest")
 
 
         # check if mat, matt, or matthew exists in string (case insensitive)
