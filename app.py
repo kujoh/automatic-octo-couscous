@@ -32,8 +32,8 @@ def receive():
 
     # Prevent self-reply
     if data["sender_type"] != "bot":
-        if data["text"].startswith("/help"):
-            send(" Hi, " + data["name"] + " \n\nI am just a half cocked bot right now, but this will be updated with actual useful info.")
+        if "/help" in data["text"].lower():     #if data["text"].startswith("/help"):
+            send(" Hi, " + data["name"] + ". \n\nAll I do right now is pull the current standings and post them here as an image. If you'd like me to to that, just say /standings.")
         #if data["name"] == "Basith Penna-Hakkim" and bas_rand <= 5:
             #send(
                 #"oh my dear basith\nmy heart yearns for your friendship\nlet’s be friends basith")
@@ -43,7 +43,7 @@ def receive():
         #if "ayo" in data["text"].lower():
             #send(
                 #"sup")
-        if data["text"].startswith("/standings"):
+        if "/standings" in data["text"].lower():     #if data["text"].startswith("/standings"):
             response = requests.get(standings_url)
             response.raise_for_status()
             soup = bs4.BeautifulSoup(response.text)
