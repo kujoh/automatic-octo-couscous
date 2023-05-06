@@ -22,7 +22,6 @@ standings_url = "https://www.oaklandyard.com/lg_standings/lg_standings.asp?LgSes
 def home():
     return "https://automaticoctocouscous.onrender.com"
 
-
 @app.route("/", methods=["POST"])
 def receive():
 
@@ -33,16 +32,8 @@ def receive():
     # Prevent self-reply
     if data["sender_type"] != "bot":
         if "/help" in data["text"].lower():     #if data["text"].startswith("/help"):
-            send(" Hi, " + data["name"] + ". \n\nAll I do right now is pull the current standings and post them here as an image. If you'd like me to to that, just say /standings.")
-        #if data["name"] == "Basith Penna-Hakkim" and bas_rand <= 5:
-            #send(
-                #"oh my dear basith\nmy heart yearns for your friendship\nlet’s be friends basith")
-            #post_img_to_groupme("./bas.jpg")
-        #if "ok" in data["text"].lower():
-            #post_img_to_groupme("./ok.jpg")
-        #if "ayo" in data["text"].lower():
-            #send(
-                #"sup")
+            send(" Hi, " + data["name"] + ". \n\nAll I do right now is pull the current standings. If a message sent to this group includes \"/standings\", I will post them.")
+
         if "/standings" in data["text"].lower():     #if data["text"].startswith("/standings"):
             response = requests.get(standings_url)
             response.raise_for_status()
@@ -65,17 +56,6 @@ def receive():
             
             post_img_to_groupme(
                 "standings.png")
-
-
-        # check if mat, matt, or matthew exists in string (case insensitive)
-        # RNG send different pictures
-        #if any(x in data["text"].lower() for x in mat_names):
-            #if rand_num >= 50:
-                #post_img_to_groupme("./mat.jpeg")
-            #elif rand_num >= 0:
-                #post_img_to_groupme("./bucket.jpg")
-            #elif rand_num < 0:
-                #post_img_to_groupme("./baby_bucket.jpg")
 
     return "ok", 200
 
