@@ -52,6 +52,7 @@ def receive():
                 databs[index] = [int(value.text) for value in cols[1:]]
     
             df = pd.DataFrame.from_dict(databs, orient='index', columns=headers)
+        
             # Add a new column and set its value based on a condition wrt the index
             df['Color'] = df.index
             df.loc[df.index == 'The B Team', 'Color'] = 'Green'
@@ -61,6 +62,7 @@ def receive():
             df.loc[df.index == 'Weak Ankles FC', 'Color'] = 'Black'
             df.loc[df.index == '', 'Color'] = ''
             df.loc[df.index == df['Color'], 'Color'] = '???'
+            
             dfi.export(df, 'standings.png', table_conversion = 'matplotlib')
             
             post_img_to_groupme(
@@ -83,13 +85,17 @@ def post_img_to_groupme(img):
         url='https://image.groupme.com/pictures',
         data=image,
         headers={
-            'Content-Type': 'image/jpeg',
+            'Content-Type': 'image/png',
             'X-Access-Token': token
         }
     )
 
-    d = json.loads(req.text)
-    picture_url = d["payload"]["picture_url"]
+    try:
+        d = req.json()
+        picture_url = d["payload"]["picture_url"]
+    except (json.JSONDecodeError, KeyError) as e:
+        print("Error decoding JSON response:", e)
+        return
 
     send_json = {
         "bot_id": bot_id,
@@ -102,4 +108,4 @@ def post_img_to_groupme(img):
     }
 
     r = requests.post(url=url, json=send_json)
-    print("post_img_to_groupme complete: ", r)
+    print("post_img_to_groupme complete:", r)
