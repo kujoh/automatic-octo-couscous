@@ -52,6 +52,8 @@ def fetch_standings_data(standings_url):
     rows = table.find_all('div', {'class': 'divMultipleColumns'})
     # Assign standingsTitle1 as headers
     headers = [title.text for title in rows[0].find_all('div', {'class': 'standingsTitle1'})]
+    
+    headers = ['W', 'L', 'T', 'S', 'A', 'D', 'P']
 
     databs = {}
     for row in rows[1:]:
