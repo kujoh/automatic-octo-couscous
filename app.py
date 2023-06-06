@@ -11,7 +11,7 @@ import hashlib
 from urllib.request import urlopen, Request
 
 token = os.getenv("Token")
-bot_id = os.getenv("BotID")  # os.getenv("TEST_BOT_ID")
+bot_id = os.getenv("BotID")
 app = Flask(__name__)
 
 url = "https://api.groupme.com/v3/bots/post"
@@ -68,6 +68,12 @@ def fetch_standings_data(standings_url):
     df.loc[df.index == '5 North Sundowners', 'Color'] = 'Gray'
     df.loc[df.index == 'Misfits', 'Color'] = 'Blue'
     df.loc[df.index == 'Weak Ankles FC', 'Color'] = 'Black'
+    df.loc[df.index == 'Killer Penguins', 'Color'] = 'Red'
+    df.loc[df.index == 'Snax R Back', 'Color'] = 'Pink'
+    df.loc[df.index == 'FC Beercelona', 'Color'] = 'Blue'
+    df.loc[df.index == 'The Banshees', 'Color'] = 'Black'
+    df.loc[df.index == 'Withourselves', 'Color'] = 'Yellow'
+    df.loc[df.index == 'Off Daily', 'Color'] = 'Purple'
     df.loc[df.index == '', 'Color'] = ''
     df.loc[df.index == df['Color'], 'Color'] = '???'
 
